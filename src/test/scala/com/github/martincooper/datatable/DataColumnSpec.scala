@@ -18,7 +18,7 @@ package com.github.martincooper.datatable
 
 import org.scalatest._
 
-class DataColumnSpec extends FlatSpec with Matchers {
+class DataColumnSpec extends FlatSpec with Matchers with DiagrammedAssertions {
 
   "A Data Column" should "be able to be created with a name and default data" in {
     val newSeq = (0 to 19) map { i => i }
@@ -53,6 +53,12 @@ class DataColumnSpec extends FlatSpec with Matchers {
     result.get.data(20) should be(99)
 
     originalColumn.data.length should be(20)
+  }
+
+  "A Data Column" should "not be able to be add a new data value of an incompatible type" in {
+    val intColumn = new DataColumn[Int]("TestCol", (0 to 19) map { i => i })
+
+    assert(intColumn.add("string value").isSuccess === false)
   }
 
   "A Data Column" should "be able to be replace an existing data value" in {
